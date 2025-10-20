@@ -10,33 +10,29 @@ public class GestionPersonnel {
     public ArrayList<String> logs = new ArrayList<>();
     
     public void ajouteSalarie(String type, String nom, double salaireDeBase, int experience, String equipe) {
-        Object[] emp = new Object[6];
-        emp[0] = UUID.randomUUID().toString();
-        emp[1] = type;
-        emp[2] = nom;
-        emp[3] = salaireDeBase;
-        emp[4] = experience;
-        emp[5] = equipe;
-        
-        employes.add(emp);
+        var emp = new Employe(type, equipe, experience, nom, salaireDeBase);
+        employes.add(emp.toArray());
         
         double salaireFinal = salaireDeBase;
-        if (type.equals("DEVELOPPEUR")) {
-            salaireFinal = salaireDeBase * 1.2;
-            if (experience > 5) {
-                salaireFinal = salaireFinal * 1.15;
-            }
-        } else if (type.equals("CHEF DE PROJET")) {
-            salaireFinal = salaireDeBase * 1.5;
-            if (experience > 3) {
-                salaireFinal = salaireFinal * 1.1;
-            }
-        } else if (type.equals("STAGIAIRE")) {
-            salaireFinal = salaireDeBase * 0.6;
+        /** a mettre dans la classe Employee**/
+        switch(type) {
+            case "DEVELOPPEUR":
+                salaireFinal = salaireDeBase * 1.2;
+                if (experience > 5) {
+                    salaireFinal = salaireFinal * 1.15;
+                }
+                break;
+            case "CHEF DE PROJET":
+                salaireFinal = salaireDeBase * 1.5;
+                if (experience > 3) {
+                    salaireFinal = salaireFinal * 1.1;
+                }
+                break;
+            case "STAGIAIRE":
+                salaireFinal = salaireDeBase * 0.6;
+                break;
         }
-        
-        salairesEmployes.put((String)emp[0], salaireFinal);
-        
+        salairesEmployes.put(emp.getUuid(), salaireFinal);
         logs.add(LocalDateTime.now() + " - Ajout de l'employé: " + nom);
     }
     
