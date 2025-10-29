@@ -2,7 +2,7 @@ package org.iut.refactoring;
 
 import java.util.UUID;
 
-public class Employe {
+public abstract class Employe {
     String type,equipe,nom,uuid; double salaireDeBase; int experience;
     public Employe(String type, String equipe, int experience, String nom, double salaireDeBase) {
         this.type = type;
@@ -70,4 +70,6 @@ public class Employe {
         tab[5] = equipe;
         return tab;
     }
+
+    abstract double calculerSalaire();
 }

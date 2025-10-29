@@ -5,41 +5,21 @@ import java.time.*;
 
 public class GestionPersonnel {
     
-    public ArrayList<Object[]> employes = new ArrayList<>();
+    public ArrayList<Employe> employes = new ArrayList<>();
     public HashMap<String, Double> salairesEmployes = new HashMap<>();
     public ArrayList<String> logs = new ArrayList<>();
     
-    public void ajouteSalarie(String type, String nom, double salaireDeBase, int experience, String equipe) {
-        var emp = new Employe(type, equipe, experience, nom, salaireDeBase);
-        employes.add(emp.toArray());
-        
-        double salaireFinal = salaireDeBase;
-        /** a mettre dans la classe Employee**/
-        switch(type) {
-            case "DEVELOPPEUR":
-                salaireFinal = salaireDeBase * 1.2;
-                if (experience > 5) {
-                    salaireFinal = salaireFinal * 1.15;
-                }
-                break;
-            case "CHEF DE PROJET":
-                salaireFinal = salaireDeBase * 1.5;
-                if (experience > 3) {
-                    salaireFinal = salaireFinal * 1.1;
-                }
-                break;
-            case "STAGIAIRE":
-                salaireFinal = salaireDeBase * 0.6;
-                break;
-        }
+    public void ajouteSalarie(Employe emp) {
+        employes.add(emp);
+        double salaireFinal = emp.calculerSalaire();
         salairesEmployes.put(emp.getUuid(), salaireFinal);
-        logs.add(LocalDateTime.now() + " - Ajout de l'employé: " + nom);
+        logs.add(LocalDateTime.now() + " - Ajout de l'employé: " + emp.getNom());
     }
     
     public double calculSalaire(String employeId) {
-        Object[] emp = null;
-        for (Object[] e : employes) {
-            if (e[0].equals(employeId)) {
+        Employe emp = null;
+        for (Employe e : employes) {
+            if (e.getUuid().equals(employeId)) {
                 emp = e;
                 break;
             }
@@ -49,9 +29,9 @@ public class GestionPersonnel {
             return 0;
         }
         
-        String type = (String) emp[1];
-        double salaireDeBase = (double) emp[3];
-        int experience = (int) emp[4];
+        String type = emp.getType();
+        double salaireDeBase = emp.getSalaireDeBase();
+        int experience = emp.getExperience();
         
         double salaireFinal = salaireDeBase;
         if (type.equals("DEVELOPPEUR")) {
@@ -81,28 +61,28 @@ public class GestionPersonnel {
         System.out.println("=== RAPPORT: " + typeRapport + " ===");
         
         if (typeRapport.equals("SALAIRE")) {
-            for (Object[] emp : employes) {
+            for (Employe emp : employes) {
                 if (filtre == null || filtre.isEmpty() || 
-                    emp[5].equals(filtre)) {
-                    String id = (String) emp[0];
-                    String nom = (String) emp[2];
+                    emp.getEquipe().equals(filtre)) {
+                    String id = emp.getUuid();
+                    String nom =  emp.getNom();
                     double salaire = calculSalaire(id);
                     System.out.println(nom + ": " + salaire + " €");
                 }
             }
         } else if (typeRapport.equals("EXPERIENCE")) {
-            for (Object[] emp : employes) {
+            for (Employe emp : employes) {
                 if (filtre == null || filtre.isEmpty() || 
-                    emp[5].equals(filtre)) {
-                    String nom = (String) emp[2];
-                    int exp = (int) emp[4];
+                    emp.getEquipe().equals(filtre)) {
+                    String nom = emp.getNom();
+                    int exp = emp.getExperience();
                     System.out.println(nom + ": " + exp + " années");
                 }
             }
         } else if (typeRapport.equals("DIVISION")) {
             HashMap<String, Integer> compteurDivisions = new HashMap<>();
-            for (Object[] emp : employes) {
-                String div = (String) emp[5];
+            for (Employe emp : employes) {
+                String div = emp.getEquipe();
                 compteurDivisions.put(div, compteurDivisions.getOrDefault(div, 0) + 1);
             }
             for (Map.Entry<String, Integer> entry : compteurDivisions.entrySet()) {
@@ -113,15 +93,13 @@ public class GestionPersonnel {
     }
     
     public void avancementEmploye(String employeId, String newType) {
-        for (Object[] emp : employes) {
-            if (emp[0].equals(employeId)) {
-                emp[1] = newType;
-                
-                double baseSalary = (double) emp[3];
+        for (Employe emp : employes) {
+            if (emp.getUuid().equals(employeId)) {
+                emp.setType(newType);
                 double nouveauSalaire = calculSalaire(employeId);
                 salairesEmployes.put(employeId, nouveauSalaire);
                 
-                logs.add(LocalDateTime.now() + " - Employé promu: " + emp[2]);
+                logs.add(LocalDateTime.now() + " - Employé promu: " + emp.getNom());
                 System.out.println("Employé promu avec succès!");
                 return;
             }
@@ -129,10 +107,10 @@ public class GestionPersonnel {
         System.out.println("ERREUR: impossible de trouver l'employé");
     }
     
-    public ArrayList<Object[]> getEmployesParDivision(String division) {
-        ArrayList<Object[]> resultat = new ArrayList<>();
-        for (Object[] emp : employes) {
-            if (emp[5].equals(division)) {
+    public ArrayList<Employe> getEmployesParDivision(String division) {
+        ArrayList<Employe> resultat = new ArrayList<>();
+        for (Employe emp : employes) {
+            if (emp.getEquipe().equals(division)) {
                 resultat.add(emp); 
             }
         }
@@ -147,18 +125,18 @@ public class GestionPersonnel {
     }
     
     public double calculBonusAnnuel(String employeId) {
-        Object[] emp = null;
-        for (Object[] e : employes) {
-            if (e[0].equals(employeId)) {
+        Employe emp = null;
+        for (Employe e : employes) {
+            if (e.getUuid().equals(employeId)) {
                 emp = e;
                 break;
             }
         } 
         if (emp == null) return 0;
         
-        String type = (String) emp[1];
-        int experience = (int) emp[4];
-        double salaireDeBase = (double) emp[3];
+        String type = emp.getType();
+        int experience = emp.getExperience();
+        double salaireDeBase = emp.getSalaireDeBase();
         
         double bonus = 0;
         if (type.equals("DEVELOPPEUR")) {

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Stack;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,10 +15,14 @@ public class TestGestionPersonnel {
     @DisplayName("Test sur la taille de la liste des employées")
     public void testEmployeesSize() {
         var gestionPersonnel = new GestionPersonnel();
-        gestionPersonnel.ajouteSalarie("DEVELOPPEUR", "Alice", 50000, 6, "IT");
-        gestionPersonnel.ajouteSalarie("CHEF DE PROJET", "Bob", 60000, 4, "RH");
-        gestionPersonnel.ajouteSalarie("STAGIAIRE", "Charlie", 20000, 0, "IT");
-        gestionPersonnel.ajouteSalarie("DEVELOPPEUR", "Dan", 55000, 12, "IT");
+        var dev1 = new Developpeur("IT",6,"Alice",50000);
+        var chef = new ChefProjet("RH",4,"Bob",60000);
+        var stagiaire = new Stagiaire("IT",0,"Charlie",20000);
+        var dev2 = new Developpeur("IT",12,"Dan",55000);
+        gestionPersonnel.ajouteSalarie(dev1);
+        gestionPersonnel.ajouteSalarie(chef);
+        gestionPersonnel.ajouteSalarie(stagiaire);
+        gestionPersonnel.ajouteSalarie(dev2);
         assertEquals(gestionPersonnel.employes.size(),4);
     }
 
@@ -25,15 +30,20 @@ public class TestGestionPersonnel {
     @DisplayName("Test sur les salaires")
     public void testSalaire() {
         var gestionPersonnel = new GestionPersonnel();
-        gestionPersonnel.ajouteSalarie("DEVELOPPEUR", "Alice", 50000, 6, "IT");
-        gestionPersonnel.ajouteSalarie("DEVELOPPEUR", "Juliette", 50000, 2, "IT");
-        gestionPersonnel.ajouteSalarie("CHEF DE PROJET", "Bob", 60000, 4, "RH");
-        gestionPersonnel.ajouteSalarie("CHEF DE PROJET", "Jean", 60000, 2, "RH");
-        gestionPersonnel.ajouteSalarie("STAGIAIRE", "Charlie", 20000, 0, "IT");
-        gestionPersonnel.ajouteSalarie("DEVELOPPEUR", "Dan", 55000, 12, "IT");
-        gestionPersonnel.ajouteSalarie("ALTERNANT", "Dan2", 55000, 12, "IT");
-        double[] array = {69000.0, 75900.0, 12000.0, 99000.00000000001,60000.0,90000.0,55000.0};
+        var dev1 = new Developpeur("IT",6,"Alice",50000);
+        var dev2 = new Developpeur("IT",2,"Juliette",50000);
+        var chef1 = new ChefProjet("RH",4,"Bob",60000);
+        var chef2 = new ChefProjet("RH",2,"Jean",60000);
+        var stagiaire = new Stagiaire("IT",0,"Charlie",20000);
+        var dev3 = new Developpeur("IT",12,"Dan",55000);
+        gestionPersonnel.ajouteSalarie(dev1);
+        gestionPersonnel.ajouteSalarie(dev2);
+        gestionPersonnel.ajouteSalarie(chef1);
+        gestionPersonnel.ajouteSalarie(chef2);
+        gestionPersonnel.ajouteSalarie(stagiaire);
+        gestionPersonnel.ajouteSalarie(dev3);
         System.out.println(gestionPersonnel.salairesEmployes.values());
+        double[] array = {99000.00000000001, 75900.0, 90000.0, 69000.0, 12000.0, 60000.0};
         for(var d:array){
             assertTrue(gestionPersonnel.salairesEmployes.values().contains(d));
         }

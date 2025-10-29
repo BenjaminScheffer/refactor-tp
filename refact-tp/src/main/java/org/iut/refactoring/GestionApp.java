@@ -3,13 +3,16 @@ package org.iut.refactoring;
 class GestionApp {
     public static void main(String[] args) {
         GestionPersonnel app = new GestionPersonnel();
+        var dev1 = new Developpeur("IT",6,"Alice",50000);
+        var chef = new ChefProjet("RH",4,"Bob",60000);
+        var stagiaire = new Stagiaire("IT",0,"Charlie",20000);
+        var dev2 = new Developpeur("IT",12,"Dan",55000);
+        app.ajouteSalarie(dev1);
+        app.ajouteSalarie(chef);
+        app.ajouteSalarie(stagiaire);
+        app.ajouteSalarie(dev2);
         
-        app.ajouteSalarie("DEVELOPPEUR", "Alice", 50000, 6, "IT");
-        app.ajouteSalarie("CHEF DE PROJET", "Bob", 60000, 4, "RH");
-        app.ajouteSalarie("STAGIAIRE", "Charlie", 20000, 0, "IT");
-        app.ajouteSalarie("DEVELOPPEUR", "Dan", 55000, 12, "IT");
-        
-        String aliceId = (String) app.employes.get(0)[0];
+        String aliceId = app.employes.get(0).getUuid();
         
         System.out.println("Salaire de Alice: " + app.calculSalaire(aliceId) + " €");
         System.out.println("Bonus de Alice: " + app.calculBonusAnnuel(aliceId) + " €");
