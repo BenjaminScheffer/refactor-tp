@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.iut.refactoring.TestGestionPersonnel" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-10-20T13:53:52.119Z" hostname="benj-Vivobook-ASUSLaptop-X1605EA-X1605EA" time="0.068">
+  <properties/>
+  <testcase name="Test sur les salaires" classname="org.iut.refactoring.TestGestionPersonnel" time="0.068"/>
+  <system-out><![CDATA[[99000.00000000001, 55000.0, 75900.0, 69000.0, 12000.0, 90000.0, 60000.0]
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
