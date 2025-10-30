@@ -12,7 +12,7 @@ class GestionApp {
         app.ajouteSalarie(stagiaire);
         app.ajouteSalarie(dev2);
         
-        String aliceId = app.employes.get(0).getUuid();
+        String aliceId = app.employes.getFirst().getUuid();
         
         System.out.println("Salaire de Alice: " + app.calculSalaire(aliceId) + " €");
         System.out.println("Bonus de Alice: " + app.calculBonusAnnuel(aliceId) + " €");

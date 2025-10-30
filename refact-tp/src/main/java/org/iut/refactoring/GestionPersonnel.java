@@ -28,33 +28,7 @@ public class GestionPersonnel {
             System.out.println("ERREUR: impossible de trouver l'employé");
             return 0;
         }
-        
-        String type = emp.getType();
-        double salaireDeBase = emp.getSalaireDeBase();
-        int experience = emp.getExperience();
-        
-        double salaireFinal = salaireDeBase;
-        if (type.equals("DEVELOPPEUR")) {
-            salaireFinal = salaireDeBase * 1.2;
-            if (experience > 5) {
-                salaireFinal = salaireFinal * 1.15;
-            }
-            if (experience > 10) {
-                salaireFinal = salaireFinal * 1.05; // bonus
-            }
-        } else if (type.equals("CHEF DE PROJET")) {
-            salaireFinal = salaireDeBase * 1.5;
-            if (experience > 3) {
-                salaireFinal = salaireFinal * 1.1;
-            }
-            salaireFinal = salaireFinal + 5000; // bonus
-        } else if (type.equals("STAGIAIRE")) {
-            salaireFinal = salaireDeBase * 0.6;
-            // Pas de bonus pour les stagiaires
-        } else {
-            salaireFinal = salaireDeBase;
-        }
-        return salaireFinal;
+        return emp.calculerBonusSalaire() ;
     }
     
     public void generationRapport(String typeRapport, String filtre) {

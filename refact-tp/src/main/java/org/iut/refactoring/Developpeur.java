@@ -14,4 +14,12 @@ public class Developpeur extends Employe{
         }
         return salaireFinal;
     }
+
+    @Override
+    double calculerBonus() {
+        if(experience > 10){
+            return calculerSalaire()*0.05;
+        }
+        return 0;
+    }
 }

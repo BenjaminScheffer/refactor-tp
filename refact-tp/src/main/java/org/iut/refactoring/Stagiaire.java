@@ -11,4 +11,9 @@ public class Stagiaire extends Employe{
         salaireFinal = salaireDeBase * 0.6;
         return salaireFinal;
     }
+
+    @Override
+    double calculerBonus() {
+        return 0;
+    }
 }

@@ -14,4 +14,9 @@ public class ChefProjet extends Employe{
         }
         return salaireFinal;
     }
+
+    @Override
+    double calculerBonus() {
+        return 5000;
+    }
 }
