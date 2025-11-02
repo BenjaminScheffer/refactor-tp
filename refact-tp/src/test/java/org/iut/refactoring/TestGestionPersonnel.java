@@ -124,4 +124,30 @@ public class TestGestionPersonnel {
         assertTrue(gestion.logs.stream()
                 .anyMatch(l -> l.contains("Rapport généré: DIVISION")));
     }
+
+    @Test
+    @DisplayName("Test sur le bonus annuel")
+    public void testBonusAnnuel() {
+        var gestionPersonnel = new GestionPersonnel();
+        var dev1 = new Developpeur("IT",6,"Alice",50000);
+        var dev2 = new Developpeur("IT",2,"Juliette",50000);
+        var chef1 = new ChefProjet("RH",4,"Bob",60000);
+        var chef2 = new ChefProjet("RH",2,"Jean",60000);
+        var stagiaire = new Stagiaire("IT",0,"Charlie",20000);
+        var dev3 = new Developpeur("IT",12,"Dan",55000);
+        var dev4 = new Developpeur("IT",12,"Dan",55000);
+        gestionPersonnel.ajouteSalarie(dev1);
+        gestionPersonnel.ajouteSalarie(dev2);
+        gestionPersonnel.ajouteSalarie(chef1);
+        gestionPersonnel.ajouteSalarie(chef2);
+        gestionPersonnel.ajouteSalarie(stagiaire);
+        gestionPersonnel.ajouteSalarie(dev3);
+        assertEquals(7500.0, gestionPersonnel.calculBonusAnnuel(dev1.getUuid()));
+        assertEquals(5000.0, gestionPersonnel.calculBonusAnnuel(dev2.getUuid()));
+        assertEquals(15600.0, gestionPersonnel.calculBonusAnnuel(chef1.getUuid()));
+        assertEquals(12000.0, gestionPersonnel.calculBonusAnnuel(chef2.getUuid()));
+        assertEquals(0.0, gestionPersonnel.calculBonusAnnuel(stagiaire.getUuid()));
+        assertEquals(0.0, gestionPersonnel.calculBonusAnnuel(dev4.getUuid()));
+}
+
 }
