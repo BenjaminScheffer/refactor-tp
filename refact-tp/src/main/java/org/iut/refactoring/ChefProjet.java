@@ -19,4 +19,13 @@ public class ChefProjet extends Employe{
     double calculerBonus() {
         return 5000;
     }
+
+    @Override
+    double bonusAnnuel() {
+        double bonus = salaireDeBase * 0.2;
+        if (experience > 3) {
+            bonus = bonus * 1.3;
+        }
+        return bonus;
+    }
 }

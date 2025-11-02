@@ -77,26 +77,7 @@ public class GestionPersonnel {
             }
         } 
         if (emp == null) return 0;
-        
-        String type = emp.getType();
-        int experience = emp.getExperience();
-        double salaireDeBase = emp.getSalaireDeBase();
-        
-        double bonus = 0;
-        if (type.equals("DEVELOPPEUR")) {
-            bonus = salaireDeBase * 0.1;
-            if (experience > 5) {
-                bonus = bonus * 1.5;
-            }
-        } else if (type.equals("CHEF DE PROJET")) {
-            bonus = salaireDeBase * 0.2;
-            if (experience > 3) {
-                bonus = bonus * 1.3;
-            }
-        } else if (type.equals("STAGIAIRE")) {
-            bonus = 0; // Pas de bonus
-        }
-        return bonus;
+        return emp.bonusAnnuel();
     }
 }
 

@@ -16,4 +16,9 @@ public class Stagiaire extends Employe{
     double calculerBonus() {
         return 0;
     }
+
+    @Override
+    double bonusAnnuel() {
+        return 0;
+    }
 }

@@ -22,4 +22,13 @@ public class Developpeur extends Employe{
         }
         return 0;
     }
+
+    @Override
+    double bonusAnnuel() {
+        double bonus = salaireDeBase * 0.1;
+        if (experience > 5) {
+            bonus = bonus * 1.5;
+        }
+        return bonus;
+    }
 }

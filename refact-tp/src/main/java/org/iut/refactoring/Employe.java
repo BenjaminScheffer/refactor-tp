@@ -76,4 +76,5 @@ public abstract class Employe {
     public double calculerBonusSalaire(){
         return calculerSalaire() + calculerBonus();
     }
+    abstract double bonusAnnuel();
 }
