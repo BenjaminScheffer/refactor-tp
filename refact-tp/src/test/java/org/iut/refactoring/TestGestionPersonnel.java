@@ -148,6 +148,20 @@ public class TestGestionPersonnel {
         assertEquals(12000.0, gestionPersonnel.calculBonusAnnuel(chef2.getUuid()));
         assertEquals(0.0, gestionPersonnel.calculBonusAnnuel(stagiaire.getUuid()));
         assertEquals(0.0, gestionPersonnel.calculBonusAnnuel(dev4.getUuid()));
-}
+    }
 
+    @Test
+    void testPrintLogs() {
+        var output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+        gestion.generationRapport(new RapportExperience(), "IT");
+        gestion.printLogs();
+        String printed = output.toString();
+        assertTrue(printed.contains("=== LOGS ==="));
+        assertTrue(printed.contains("- Ajout de l'employé: Alice"));
+        assertTrue(printed.contains("- Ajout de l'employé: Bob"));
+        assertTrue(printed.contains("- Ajout de l'employé: Charlie"));
+        assertTrue(printed.contains("- Ajout de l'employé: Dan"));
+        assertTrue(printed.contains("- Rapport généré: EXPERIENCE"));
+    }
 }
