@@ -8,14 +8,18 @@ public class GestionPersonnel {
     public ArrayList<Employe> employes = new ArrayList<>();
     public HashMap<String, Double> salairesEmployes = new HashMap<>();
     public ServiceStockageLogs logs;
+    public ServicePrintLogs printer;
 
     public GestionPersonnel() {
         this.logs = new ArrayListLogs();
+        this.printer = new PrintConsole();
     }
 
-    public GestionPersonnel(ServiceStockageLogs logs) {
+    public GestionPersonnel(ServiceStockageLogs logs,ServicePrintLogs printer) {
         this.logs = logs;
+        this.printer = printer;
     }
+
     public void ajouteSalarie(Employe emp) {
         employes.add(emp);
         double salaireFinal = emp.calculerSalaire();
@@ -59,10 +63,7 @@ public class GestionPersonnel {
     }
     
     public void printLogs() {
-        System.out.println("=== LOGS ===");
-        for (String log : logs.getLogs()) {
-            System.out.println(log);
-        }
+        printer.print(logs.getLogs());
     }
     
     public double calculBonusAnnuel(String employeId) {
