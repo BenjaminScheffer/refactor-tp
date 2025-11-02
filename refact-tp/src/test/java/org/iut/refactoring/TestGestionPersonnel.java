@@ -1,9 +1,12 @@
 package org.iut.refactoring;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Stack;
 
@@ -11,41 +14,37 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGestionPersonnel {
 
-    @Test
-    @DisplayName("Test sur la taille de la liste des employées")
-    public void testEmployeesSize() {
-        var gestionPersonnel = new GestionPersonnel();
+    private GestionPersonnel gestion;
+
+    @BeforeEach
+    void setup() {
+        gestion = new GestionPersonnel();
         var dev1 = new Developpeur("IT",6,"Alice",50000);
         var chef = new ChefProjet("RH",4,"Bob",60000);
         var stagiaire = new Stagiaire("IT",0,"Charlie",20000);
         var dev2 = new Developpeur("IT",12,"Dan",55000);
-        gestionPersonnel.ajouteSalarie(dev1);
-        gestionPersonnel.ajouteSalarie(chef);
-        gestionPersonnel.ajouteSalarie(stagiaire);
-        gestionPersonnel.ajouteSalarie(dev2);
-        assertEquals(gestionPersonnel.employes.size(),4);
+        gestion.ajouteSalarie(dev1);
+        gestion.ajouteSalarie(chef);
+        gestion.ajouteSalarie(stagiaire);
+        gestion.ajouteSalarie(dev2);
+    }
+    @Test
+    @DisplayName("Test sur la taille de la liste des employées")
+    public void testEmployeesSize() {
+        assertEquals(4, gestion.employes.size());
     }
 
     @Test
     @DisplayName("Test sur les salaires")
     public void testSalaire() {
-        var gestionPersonnel = new GestionPersonnel();
-        var dev1 = new Developpeur("IT",6,"Alice",50000);
         var dev2 = new Developpeur("IT",2,"Juliette",50000);
-        var chef1 = new ChefProjet("RH",4,"Bob",60000);
         var chef2 = new ChefProjet("RH",2,"Jean",60000);
-        var stagiaire = new Stagiaire("IT",0,"Charlie",20000);
-        var dev3 = new Developpeur("IT",12,"Dan",55000);
-        gestionPersonnel.ajouteSalarie(dev1);
-        gestionPersonnel.ajouteSalarie(dev2);
-        gestionPersonnel.ajouteSalarie(chef1);
-        gestionPersonnel.ajouteSalarie(chef2);
-        gestionPersonnel.ajouteSalarie(stagiaire);
-        gestionPersonnel.ajouteSalarie(dev3);
-        System.out.println(gestionPersonnel.salairesEmployes.values());
+        gestion.ajouteSalarie(dev2);
+        gestion.ajouteSalarie(chef2);
+        System.out.println(gestion.salairesEmployes.values());
         double[] array = {99000.00000000001, 75900.0, 90000.0, 69000.0, 12000.0, 60000.0};
         for(var d:array){
-            assertTrue(gestionPersonnel.salairesEmployes.values().contains(d));
+            assertTrue(gestion.salairesEmployes.values().contains(d));
         }
     }
 
@@ -72,6 +71,23 @@ public class TestGestionPersonnel {
         assertEquals(gestionPersonnel.calculSalaire(chef2.getUuid()),chef2.calculerSalaire()+5000);
         assertEquals(gestionPersonnel.calculSalaire(stagiaire.getUuid()),stagiaire.calculerSalaire());
         assertEquals(gestionPersonnel.calculSalaire(dev3.getUuid()),dev3.calculerSalaire()*1.05);
-        assertEquals(gestionPersonnel.calculSalaire(dev4.getUuid()),0);
+        assertEquals(0, gestionPersonnel.calculSalaire(dev4.getUuid()));
+    }
+
+    @Test
+    void testGenerationRapportSalaire() {
+        var output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+        gestion.generationRapport("SALAIRE", "IT");
+        String printed = output.toString();
+        assertTrue(printed.contains("=== RAPPORT: SALAIRE ==="));
+        assertTrue(printed.contains("Alice"));
+        assertTrue(printed.contains("Charlie"));
+        assertTrue(printed.contains("Dan"));
+        assertFalse(printed.contains("Bob"));
+
+        // Vérifie que le log a été ajouté
+        assertTrue(gestion.logs.stream()
+                .anyMatch(l -> l.contains("Rapport généré: SALAIRE")));
     }
 }
