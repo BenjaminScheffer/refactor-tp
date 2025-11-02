@@ -17,9 +17,8 @@ class GestionApp {
         System.out.println("Salaire de Alice: " + app.calculSalaire(aliceId) + " €");
         System.out.println("Bonus de Alice: " + app.calculBonusAnnuel(aliceId) + " €");
         
-        app.generationRapport("SALAIRE", "IT");
-        app.generationRapport("EQUIPE", null);
-        
+        app.generationRapport(new RapportSalaire(app), "IT");
+
         app.avancementEmploye(aliceId, "CHEF DE PROJET");
         
         app.printLogs();

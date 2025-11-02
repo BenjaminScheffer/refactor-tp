@@ -31,39 +31,9 @@ public class GestionPersonnel {
         return emp.calculerBonusSalaire() ;
     }
     
-    public void generationRapport(String typeRapport, String filtre) {
-        System.out.println("=== RAPPORT: " + typeRapport + " ===");
-        
-        if (typeRapport.equals("SALAIRE")) {
-            for (Employe emp : employes) {
-                if (filtre == null || filtre.isEmpty() || 
-                    emp.getEquipe().equals(filtre)) {
-                    String id = emp.getUuid();
-                    String nom =  emp.getNom();
-                    double salaire = calculSalaire(id);
-                    System.out.println(nom + ": " + salaire + " €");
-                }
-            }
-        } else if (typeRapport.equals("EXPERIENCE")) {
-            for (Employe emp : employes) {
-                if (filtre == null || filtre.isEmpty() || 
-                    emp.getEquipe().equals(filtre)) {
-                    String nom = emp.getNom();
-                    int exp = emp.getExperience();
-                    System.out.println(nom + ": " + exp + " années");
-                }
-            }
-        } else if (typeRapport.equals("DIVISION")) {
-            HashMap<String, Integer> compteurDivisions = new HashMap<>();
-            for (Employe emp : employes) {
-                String div = emp.getEquipe();
-                compteurDivisions.put(div, compteurDivisions.getOrDefault(div, 0) + 1);
-            }
-            for (Map.Entry<String, Integer> entry : compteurDivisions.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue() + " employés");
-            }
-        }
-        logs.add(LocalDateTime.now() + " - Rapport généré: " + typeRapport);
+    public void generationRapport(TypeRapport typeRapport, String filtre) {
+        typeRapport.generer(employes, filtre);
+        logs.add(LocalDateTime.now() + " - Rapport généré: " + typeRapport.getNom());
     }
     
     public void avancementEmploye(String employeId, String newType) {

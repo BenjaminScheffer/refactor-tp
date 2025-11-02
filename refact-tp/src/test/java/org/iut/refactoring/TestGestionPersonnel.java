@@ -78,7 +78,7 @@ public class TestGestionPersonnel {
     void testGenerationRapportSalaire() {
         var output = new ByteArrayOutputStream();
         System.setOut(new PrintStream(output));
-        gestion.generationRapport("SALAIRE", "IT");
+        gestion.generationRapport(new RapportSalaire(gestion), "IT");
         String printed = output.toString();
         assertTrue(printed.contains("=== RAPPORT: SALAIRE ==="));
         assertTrue(printed.contains("Alice"));
@@ -89,5 +89,39 @@ public class TestGestionPersonnel {
         // Vérifie que le log a été ajouté
         assertTrue(gestion.logs.stream()
                 .anyMatch(l -> l.contains("Rapport généré: SALAIRE")));
+    }
+
+    @Test
+    void testGenerationRapportExperience() {
+        var output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+        gestion.generationRapport(new RapportExperience(), "IT");
+
+        String printed = output.toString();
+        assertTrue(printed.contains("=== RAPPORT: EXPERIENCE ==="));
+        assertTrue(printed.contains("Alice: 6 années"));
+        assertTrue(printed.contains("Charlie: 0 années"));
+        assertTrue(printed.contains("Dan: 12 années"));
+        assertFalse(printed.contains("Bob")); // Bob est dans RH, pas IT
+
+        // Vérifie le log
+        assertTrue(gestion.logs.stream()
+                .anyMatch(l -> l.contains("Rapport généré: EXPERIENCE")));
+    }
+
+    @Test
+    void testGenerationRapportDivision() {
+        var output = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(output));
+        gestion.generationRapport(new RapportDivision(), null);
+
+        String printed = output.toString();
+        assertTrue(printed.contains("=== RAPPORT: DIVISION ==="));
+        assertTrue(printed.contains("IT: 3 employés"));
+        assertTrue(printed.contains("RH: 1 employés"));
+
+        // Vérifie le log
+        assertTrue(gestion.logs.stream()
+                .anyMatch(l -> l.contains("Rapport généré: DIVISION")));
     }
 }
