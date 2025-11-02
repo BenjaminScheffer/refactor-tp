@@ -7,8 +7,15 @@ public class GestionPersonnel {
     
     public ArrayList<Employe> employes = new ArrayList<>();
     public HashMap<String, Double> salairesEmployes = new HashMap<>();
-    public ArrayList<String> logs = new ArrayList<>();
-    
+    public ServiceStockageLogs logs;
+
+    public GestionPersonnel() {
+        this.logs = new ArrayListLogs();
+    }
+
+    public GestionPersonnel(ServiceStockageLogs logs) {
+        this.logs = logs;
+    }
     public void ajouteSalarie(Employe emp) {
         employes.add(emp);
         double salaireFinal = emp.calculerSalaire();
@@ -63,7 +70,7 @@ public class GestionPersonnel {
     
     public void printLogs() {
         System.out.println("=== LOGS ===");
-        for (String log : logs) {
+        for (String log : logs.getLogs()) {
             System.out.println(log);
         }
     }

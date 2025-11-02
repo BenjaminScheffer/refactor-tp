@@ -87,7 +87,7 @@ public class TestGestionPersonnel {
         assertFalse(printed.contains("Bob"));
 
         // Vérifie que le log a été ajouté
-        assertTrue(gestion.logs.stream()
+        assertTrue(gestion.logs.getLogs().stream()
                 .anyMatch(l -> l.contains("Rapport généré: SALAIRE")));
     }
 
@@ -105,7 +105,7 @@ public class TestGestionPersonnel {
         assertFalse(printed.contains("Bob")); // Bob est dans RH, pas IT
 
         // Vérifie le log
-        assertTrue(gestion.logs.stream()
+        assertTrue(gestion.logs.getLogs().stream()
                 .anyMatch(l -> l.contains("Rapport généré: EXPERIENCE")));
     }
 
@@ -121,7 +121,7 @@ public class TestGestionPersonnel {
         assertTrue(printed.contains("RH: 1 employés"));
 
         // Vérifie le log
-        assertTrue(gestion.logs.stream()
+        assertTrue(gestion.logs.getLogs().stream()
                 .anyMatch(l -> l.contains("Rapport généré: DIVISION")));
     }
 
