@@ -58,16 +58,6 @@ public class GestionPersonnel {
         System.out.println("ERREUR: impossible de trouver l'employé");
     }
     
-    public ArrayList<Employe> getEmployesParDivision(String division) {
-        ArrayList<Employe> resultat = new ArrayList<>();
-        for (Employe emp : employes) {
-            if (emp.getEquipe().equals(division)) {
-                resultat.add(emp); 
-            }
-        }
-        return resultat;
-    }
-    
     public void printLogs() {
         System.out.println("=== LOGS ===");
         for (String log : logs.getLogs()) {
