@@ -13,12 +13,12 @@ public class RapportSalaire implements TypeRapport {
     @Override
     public void generer(List<Employe> employes, String filtre) {
         System.out.println("=== RAPPORT: SALAIRE ===");
-        for (Employe emp : employes) {
-            if (filtre == null || filtre.isEmpty() || emp.getEquipe().equals(filtre)) {
-                double salaire = gestion.calculSalaire(emp.getUuid());
-                System.out.println(emp.getNom() + ": " + salaire + " €");
-            }
-        }
+        employes.stream()
+                .filter(emp -> filtre == null || filtre.isEmpty() || emp.getEquipe().equals(filtre))
+                .forEach(emp -> {
+                    double salaire = gestion.calculSalaire(emp.getUuid());
+                    System.out.println(emp.getNom() + ": " + salaire + " €");
+                });
     }
 
     @Override

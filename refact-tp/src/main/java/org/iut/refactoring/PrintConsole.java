@@ -7,8 +7,6 @@ public class PrintConsole implements ServicePrintLogs {
     @Override
     public void print(ArrayList<String> logs) {
         System.out.println("=== LOGS ===");
-        for (String log : logs) {
-            System.out.println(log);
-        }
+        logs.forEach(System.out::println);
     }
 }

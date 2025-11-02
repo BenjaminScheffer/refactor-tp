@@ -28,18 +28,14 @@ public class GestionPersonnel {
     }
     
     public double calculSalaire(String employeId) {
-        Employe emp = null;
-        for (Employe e : employes) {
-            if (e.getUuid().equals(employeId)) {
-                emp = e;
-                break;
-            }
-        }
-        if (emp == null) {
-            System.out.println("ERREUR: impossible de trouver l'employé");
-            return 0;
-        }
-        return emp.calculerBonusSalaire() ;
+        return employes.stream()
+                .filter(e -> e.getUuid().equals(employeId))
+                .findFirst()
+                .map(Employe::calculerBonusSalaire)
+                .orElseGet(() -> {
+                    System.out.println("ERREUR: impossible de trouver l'employé");
+                    return 0.0;
+                });
     }
     
     public void generationRapport(TypeRapport typeRapport, String filtre) {
@@ -48,18 +44,21 @@ public class GestionPersonnel {
     }
     
     public void avancementEmploye(String employeId, String newType) {
-        for (Employe emp : employes) {
-            if (emp.getUuid().equals(employeId)) {
-                emp.setType(newType);
-                double nouveauSalaire = calculSalaire(employeId);
-                salairesEmployes.put(employeId, nouveauSalaire);
-                
-                logs.add(LocalDateTime.now() + " - Employé promu: " + emp.getNom());
-                System.out.println("Employé promu avec succès!");
-                return;
-            }
+        Optional<Employe> optEmp = employes.stream()
+                .filter(emp -> emp.getUuid().equals(employeId))
+                .findFirst();
+
+        if (optEmp.isPresent()) {
+            Employe emp = optEmp.get();
+            emp.setType(newType);
+            double nouveauSalaire = calculSalaire(employeId);
+            salairesEmployes.put(employeId, nouveauSalaire);
+
+            logs.add(LocalDateTime.now() + " - Employé promu: " + emp.getNom());
+            System.out.println("Employé promu avec succès!");
+        } else {
+            System.out.println("ERREUR: impossible de trouver l'employé");
         }
-        System.out.println("ERREUR: impossible de trouver l'employé");
     }
     
     public void printLogs() {
@@ -67,15 +66,11 @@ public class GestionPersonnel {
     }
     
     public double calculBonusAnnuel(String employeId) {
-        Employe emp = null;
-        for (Employe e : employes) {
-            if (e.getUuid().equals(employeId)) {
-                emp = e;
-                break;
-            }
-        } 
-        if (emp == null) return 0;
-        return emp.bonusAnnuel();
+        return employes.stream()
+                .filter(e -> e.getUuid().equals(employeId))
+                .findFirst()
+                .map(Employe::bonusAnnuel)
+                .orElse(0.0);
     }
 }
 
